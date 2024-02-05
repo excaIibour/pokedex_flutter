@@ -25,6 +25,38 @@ mixin _$PokemonStore on APokemonStore, Store {
     });
   }
 
+  late final _$filtroPokemonListaAtom =
+      Atom(name: 'APokemonStore.filtroPokemonLista', context: context);
+
+  @override
+  ObservableList<PokemonDetalhes> get filtroPokemonLista {
+    _$filtroPokemonListaAtom.reportRead();
+    return super.filtroPokemonLista;
+  }
+
+  @override
+  set filtroPokemonLista(ObservableList<PokemonDetalhes> value) {
+    _$filtroPokemonListaAtom.reportWrite(value, super.filtroPokemonLista, () {
+      super.filtroPokemonLista = value;
+    });
+  }
+
+  late final _$detalhePokemonListaAtom =
+      Atom(name: 'APokemonStore.detalhePokemonLista', context: context);
+
+  @override
+  ObservableList<PokemonDetalhes> get detalhePokemonLista {
+    _$detalhePokemonListaAtom.reportRead();
+    return super.detalhePokemonLista;
+  }
+
+  @override
+  set detalhePokemonLista(ObservableList<PokemonDetalhes> value) {
+    _$detalhePokemonListaAtom.reportWrite(value, super.detalhePokemonLista, () {
+      super.detalhePokemonLista = value;
+    });
+  }
+
   late final _$listarPokemonAsyncAction =
       AsyncAction('APokemonStore.listarPokemon', context: context);
 
@@ -33,10 +65,26 @@ mixin _$PokemonStore on APokemonStore, Store {
     return _$listarPokemonAsyncAction.run(() => super.listarPokemon(context));
   }
 
+  late final _$APokemonStoreActionController =
+      ActionController(name: 'APokemonStore', context: context);
+
+  @override
+  void filtrarPokemonsPeloNome(String name) {
+    final _$actionInfo = _$APokemonStoreActionController.startAction(
+        name: 'APokemonStore.filtrarPokemonsPeloNome');
+    try {
+      return super.filtrarPokemonsPeloNome(name);
+    } finally {
+      _$APokemonStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
-pokemonLista: ${pokemonLista}
+pokemonLista: ${pokemonLista},
+filtroPokemonLista: ${filtroPokemonLista},
+detalhePokemonLista: ${detalhePokemonLista}
     ''';
   }
 }

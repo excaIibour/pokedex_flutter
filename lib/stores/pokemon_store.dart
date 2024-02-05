@@ -15,6 +15,12 @@ abstract class APokemonStore with Store {
   @observable
   ObservableList<Pokemon> pokemonLista = ObservableList<Pokemon>();
 
+  @observable
+  ObservableList<PokemonDetalhes> filtroPokemonLista = ObservableList<PokemonDetalhes>();
+
+  @observable
+  ObservableList<PokemonDetalhes> detalhePokemonLista = ObservableList<PokemonDetalhes>();
+
   @action
   Future<void> listarPokemon(BuildContext context) async {
     try {
@@ -33,6 +39,7 @@ abstract class APokemonStore with Store {
       }
 
       pokemonLista = ObservableList<Pokemon>.of(listarPokemon);
+      filtroPokemonLista = ObservableList<PokemonDetalhes>.of(detalhePokemonLista);
     } catch (e) {
       if (context.mounted) {
         if (e is DioException && e.response != null) {
@@ -60,9 +67,18 @@ abstract class APokemonStore with Store {
         image: image
       );
 
+      detalhePokemonLista.add(pokemon);
     } catch (e) {
       //print('Erro ao obter detalhes do Pokemon: $e');
     }
   }
 
+  @action
+  void filtrarPokemonsPeloNome(String name) {
+    if (name.isEmpty) {
+      filtroPokemonLista = ObservableList<PokemonDetalhes>.of(detalhePokemonLista);
+    } else {
+      filtroPokemonLista = ObservableList<PokemonDetalhes>.of(detalhePokemonLista.where((pokemon) => pokemon.name.toLowerCase().contains(name.toLowerCase())));
+    }
+  }
 }
