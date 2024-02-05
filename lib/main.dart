@@ -1,4 +1,3 @@
-// main.dart
 import 'package:flutter/material.dart';
 import 'package:projeto_pokemon/telas/tela_lista_pokemon.dart';
 import 'package:projeto_pokemon/stores/pokemon_store.dart';
