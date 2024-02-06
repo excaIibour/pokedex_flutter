@@ -10,24 +10,28 @@ part 'pokemon_store.g.dart';
 class PokemonStore = APokemonStore with _$PokemonStore;
 
 abstract class APokemonStore with Store {
+//objeto pra exibir mensagens de erro
   Mensagem mensagem = Mensagem();
 
+//lista observavel de pokemons
   @observable
   ObservableList<Pokemon> pokemonLista = ObservableList<Pokemon>();
 
+//lista observavel de pokemons para filtragem atraves do nome
   @observable
   ObservableList<PokemonDetalhes> filtroPokemonLista = ObservableList<PokemonDetalhes>();
 
+//lista observavel de detalhes dos pokemons
   @observable
   ObservableList<PokemonDetalhes> detalhePokemonLista = ObservableList<PokemonDetalhes>();
 
-   @observable
-  ObservableMap<String, PokemonDetalhes> mapaDetalhesPokemon = ObservableMap<String, PokemonDetalhes>();
-
+//metodo de ação assíncrona para listar pokemons
   @action
   Future<void> listarPokemon(BuildContext context) async {
     try {
+      //realiza a requisição para obter a lista
       final response = await Requisicoes.pegarListaPokemon();
+      //mapeia os dados da resposta
       final List<Pokemon> listarPokemon = response.data['results']
           .map<Pokemon>((pokemonDados) {
             return Pokemon(
@@ -37,15 +41,19 @@ abstract class APokemonStore with Store {
           })
           .toList();
 
+      //se a tela ainda estiver 'montada' (ativa), obtem os detalhes pra cada pokemon e adiciona na lista de detalhes
       if (context.mounted) {
         for (var pokemon in listarPokemon) {
           await obterDetalhesPokemon(context, pokemon.url, pokemon.nome);
         }
       }
 
+      //atualiza as listas observáveis com as listas criadas
+
       pokemonLista = ObservableList<Pokemon>.of(listarPokemon);
       filtroPokemonLista = ObservableList<PokemonDetalhes>.of(detalhePokemonLista);
     } catch (e) {
+      //trata erros durante a requisição caso a tela ainda esteja 'montada' (ativa)
       if (context.mounted) {
         if (e is DioException) {
           mensagem.exibirMensagem(context, 'Erro na requisição: ${e.response?.statusCode}');
@@ -56,8 +64,10 @@ abstract class APokemonStore with Store {
     }
   }
 
+  //método de ação assíncrona para obter detalhes de um pokemon
   Future<void> obterDetalhesPokemon(BuildContext context, String url, String nome) async {
     try {
+      //faz a requisição para obter detalhes do pokemon
       final response = await Requisicoes.pegarDetalhesPokemon(url);
 
       final baseExperience = response.data['base_experience'];
@@ -71,6 +81,7 @@ abstract class APokemonStore with Store {
       final altura = response.data['height'];
       final id = response.data['id'];
 
+      //atribui PokemonDetalhes com os detalhes obtidos
       final PokemonDetalhes pokemon = PokemonDetalhes(
         nome: nome, 
         url: url,
@@ -82,8 +93,10 @@ abstract class APokemonStore with Store {
         id: id
       );
 
+      //adiciona o objeto PokemonDetalhes à lista detalhePokemonLista
       detalhePokemonLista.add(pokemon);
     } catch (e) {
+      //trata erros durante a requisição caso a tela ainda esteja 'montada' (ativa)
       if (context.mounted) {
         if (e is DioException) {
           mensagem.exibirMensagem(context, 'Erro na requisição: ${e.response?.statusCode}');
@@ -94,6 +107,7 @@ abstract class APokemonStore with Store {
     }
   }
 
+  //metodo de ação para filtrar pokemon pelo nome
   @action
   void filtrarPokemonsPeloNome(String nome) {
     if (nome.isEmpty) {
