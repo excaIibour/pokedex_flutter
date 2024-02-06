@@ -12,7 +12,7 @@ Supondo que você clonou o projeto do GitHub, basta abri-lo na IDE e rodar o seg
 
 ## Como o projeto deve parecer?
 
-![Banner 1](assets/images/mockup.png)
+![Banner 1](assets/imagens/mockup.png)
 
 ## Considerações finais
 
