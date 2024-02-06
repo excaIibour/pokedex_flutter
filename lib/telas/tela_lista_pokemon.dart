@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:projeto_pokemon/modelos/modelo_pokemon.dart';
 import 'package:projeto_pokemon/stores/pokemon_store.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:projeto_pokemon/tema/tema.dart';
 
 class TelaListaPokemon extends StatefulWidget {
   final PokemonStore pokemonStore;
@@ -14,7 +15,6 @@ class TelaListaPokemon extends StatefulWidget {
 }
 
 class TelaListaPokemonState extends State<TelaListaPokemon> {
-  bool ehEscuro = false;
   TextEditingController pesquisaController = TextEditingController();
 
   @override
@@ -26,20 +26,16 @@ class TelaListaPokemonState extends State<TelaListaPokemon> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ehEscuro ? ThemeData.dark() : ThemeData.light(),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Pokedex'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.lightbulb),
-              onPressed: () {
-                setState(() {
-                  ehEscuro = !ehEscuro;
-                });
-              },
+          toolbarHeight: 90,
+          title: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(
+              'Pokédex',
+              style: TextStyle(fontFamily: 'Blinker', fontWeight: FontWeight.bold, fontSize: 35, color: Tema.cores.secondary),
             ),
-          ],
+          ),
         ),
         body: Observer(
           builder: (context) {
@@ -65,22 +61,34 @@ class TelaListaPokemonState extends State<TelaListaPokemon> {
 
   Widget _barraPesquisa() {
     return Padding(
-      padding: const EdgeInsets.only(left: 50, right: 50, bottom: 20, top: 20),
-      child: TextField(
-        controller: pesquisaController,
-        onChanged: (value) {
-          widget.pokemonStore.filtrarPokemonsPeloNome(value);
-        },
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30.0),
-            borderSide: const BorderSide(color: Colors.grey, width: 0.5),
+      padding: const EdgeInsets.only(left: 35, right: 35, bottom: 20, top: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 20),
+            child: Text('Pesquise um Pokemon pelo nome.', style: TextStyle(color: Colors.grey)),
           ),
-          hintText: 'Pesquisar Pokémon',
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-        ),
-      ),
+          TextField(
+            controller: pesquisaController,
+            onChanged: (value) {
+              widget.pokemonStore.filtrarPokemonsPeloNome(value);
+            },
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+              filled: true,
+              fillColor: Colors.grey[200],
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide.none,
+              ),
+              hintText: 'Nome',
+              hintStyle: const TextStyle(color: Colors.grey),
+              prefixIcon: Icon(Icons.search, color: Tema.cores.secondary),
+            ),
+          ),
+        ]
+      )
     );
   }
 
@@ -97,34 +105,37 @@ class TelaListaPokemonState extends State<TelaListaPokemon> {
   }
 
   Widget _cardPokemon(PokemonDetalhes pokemonDetalhes, BuildContext context) {
+    int index = widget.pokemonStore.filtroPokemonLista.indexOf(pokemonDetalhes);
+    Color corCard = _agruparPokemons(index);
+
     return GestureDetector(
       onTap: () {
+        Navigator.pushNamed(
+          context,
+          '/detalhes',
+          arguments: pokemonDetalhes,
+        );
       },
       child: Card(
+        color: corCard,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CachedNetworkImage(
-                imageUrl: pokemonDetalhes.image,
-                width: 230.0,
-                height: 150.0,
+                imageUrl: pokemonDetalhes.imagem,
+                width: 120.0,
+                height: 120.0,
+                fit: BoxFit.cover,
                 placeholder: (context, image) => const CircularProgressIndicator(),
                 errorWidget: (context, image, error) => const Icon(Icons.error),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  pokemonDetalhes.name,
-                  style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Clique para visualizar mais',
-                  style: TextStyle(fontSize: 12.0, color: Colors.grey),
+                  pokemonDetalhes.nome,
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Tema.cores.secondary),
                 ),
               ),
             ],
@@ -132,5 +143,14 @@ class TelaListaPokemonState extends State<TelaListaPokemon> {
         ),
       ),
     );
+  }
+
+  Color _agruparPokemons(int index) {
+    int pokemonsPorGrupo = 3;
+    List<Color> cores = [const Color(0xFFCAE2D5), const Color(0xFFEAD4BC), const Color(0xFF9CCEDD)];
+
+    int grupoIndex = (index ~/ pokemonsPorGrupo) % cores.length;
+
+    return cores[grupoIndex];
   }
 }

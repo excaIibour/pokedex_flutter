@@ -28,14 +28,14 @@ abstract class APokemonStore with Store {
       final List<Pokemon> listarPokemon = response.data['results']
           .map<Pokemon>((pokemonDados) {
             return Pokemon(
-              name: pokemonDados['name'],
+              nome: pokemonDados['name'],
               url: pokemonDados['url'],
             );
           })
           .toList();
 
       for (var pokemon in listarPokemon) {
-        await obterDetalhesPokemon(pokemon.url, pokemon.name);
+        await obterDetalhesPokemon(pokemon.url, pokemon.nome);
       }
 
       pokemonLista = ObservableList<Pokemon>.of(listarPokemon);
@@ -51,20 +51,28 @@ abstract class APokemonStore with Store {
     }
   }
 
-  Future<void> obterDetalhesPokemon(String url, String name) async {
+  Future<void> obterDetalhesPokemon(String url, String nome) async {
     try {
       final response = await Requisicoes.pegarDetalhesPokemon(url);
 
       final baseExperience = response.data['base_experience'];
-      final abilities = response.data['abilities'];
-      final image = response.data['sprites']['front_default'];
+      final habilidades = response.data['abilities'] as List<dynamic>;
+      final List<dynamic> habilidadesLista = habilidades.map<String>((habilidade) {
+        final abilityData = habilidade['ability'];
+        return abilityData['name'];
+      }).toList();
+      final imagem = response.data['sprites']['front_default'];
+      final peso = response.data['weight'];
+      final altura = response.data['height'];
 
       final PokemonDetalhes pokemon = PokemonDetalhes(
-        name: name, 
+        nome: nome, 
         url: url,
         baseExperience: baseExperience,
-        abilities: abilities,
-        image: image
+        habilidades: habilidadesLista,
+        imagem: imagem,
+        peso: peso,
+        altura: altura
       );
 
       detalhePokemonLista.add(pokemon);
@@ -74,11 +82,11 @@ abstract class APokemonStore with Store {
   }
 
   @action
-  void filtrarPokemonsPeloNome(String name) {
-    if (name.isEmpty) {
+  void filtrarPokemonsPeloNome(String nome) {
+    if (nome.isEmpty) {
       filtroPokemonLista = ObservableList<PokemonDetalhes>.of(detalhePokemonLista);
     } else {
-      filtroPokemonLista = ObservableList<PokemonDetalhes>.of(detalhePokemonLista.where((pokemon) => pokemon.name.toLowerCase().contains(name.toLowerCase())));
+      filtroPokemonLista = ObservableList<PokemonDetalhes>.of(detalhePokemonLista.where((pokemon) => pokemon.nome.toLowerCase().contains(nome.toLowerCase())));
     }
   }
 }
