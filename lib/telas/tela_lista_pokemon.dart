@@ -28,7 +28,8 @@ class TelaListaPokemonState extends State<TelaListaPokemon> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 90,
+          surfaceTintColor: Tema.cores.primary,
+          toolbarHeight: 100,
           title: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Text(

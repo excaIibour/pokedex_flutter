@@ -11,7 +11,7 @@ class Tema {
     onSecondary: Color(0xFF2D331C),
     secondaryContainer: Color(0xFF434931),
     onSecondaryContainer: Color.fromARGB(255, 86, 105, 12),
-    tertiary: Color(0xFFD1BCFF),
+    tertiary: Color(0xFFF6FBFB),
     onTertiary: Color(0xFF3A1B75),
     tertiaryContainer: Color(0xFF51358D),
     onTertiaryContainer: Color.fromARGB(255, 103, 41, 208),

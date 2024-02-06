@@ -57,6 +57,22 @@ mixin _$PokemonStore on APokemonStore, Store {
     });
   }
 
+  late final _$mapaDetalhesPokemonAtom =
+      Atom(name: 'APokemonStore.mapaDetalhesPokemon', context: context);
+
+  @override
+  ObservableMap<String, PokemonDetalhes> get mapaDetalhesPokemon {
+    _$mapaDetalhesPokemonAtom.reportRead();
+    return super.mapaDetalhesPokemon;
+  }
+
+  @override
+  set mapaDetalhesPokemon(ObservableMap<String, PokemonDetalhes> value) {
+    _$mapaDetalhesPokemonAtom.reportWrite(value, super.mapaDetalhesPokemon, () {
+      super.mapaDetalhesPokemon = value;
+    });
+  }
+
   late final _$listarPokemonAsyncAction =
       AsyncAction('APokemonStore.listarPokemon', context: context);
 
@@ -69,11 +85,11 @@ mixin _$PokemonStore on APokemonStore, Store {
       ActionController(name: 'APokemonStore', context: context);
 
   @override
-  void filtrarPokemonsPeloNome(String name) {
+  void filtrarPokemonsPeloNome(String nome) {
     final _$actionInfo = _$APokemonStoreActionController.startAction(
         name: 'APokemonStore.filtrarPokemonsPeloNome');
     try {
-      return super.filtrarPokemonsPeloNome(name);
+      return super.filtrarPokemonsPeloNome(nome);
     } finally {
       _$APokemonStoreActionController.endAction(_$actionInfo);
     }
@@ -84,7 +100,8 @@ mixin _$PokemonStore on APokemonStore, Store {
     return '''
 pokemonLista: ${pokemonLista},
 filtroPokemonLista: ${filtroPokemonLista},
-detalhePokemonLista: ${detalhePokemonLista}
+detalhePokemonLista: ${detalhePokemonLista},
+mapaDetalhesPokemon: ${mapaDetalhesPokemon}
     ''';
   }
 }
