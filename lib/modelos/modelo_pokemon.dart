@@ -1,3 +1,4 @@
+//variaveis da classe para a requisição geral: todos os pokemons
 class Pokemon {
   final String nome;
   final String url;
@@ -5,6 +6,7 @@ class Pokemon {
   Pokemon({required this.nome, required this.url});
 }
 
+//variaveis da classe para obter os detalhes de cada pokemon, que vem do parametro "url" da classe acima
 class PokemonDetalhes {
   final String nome;
   final String url;

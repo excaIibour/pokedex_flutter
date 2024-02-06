@@ -17,6 +17,7 @@ class TelaListaPokemon extends StatefulWidget {
 class TelaListaPokemonState extends State<TelaListaPokemon> {
   TextEditingController pesquisaController = TextEditingController();
 
+//inicializa a lista de pokemons
   @override
   void initState() {
     super.initState();
@@ -60,6 +61,7 @@ class TelaListaPokemonState extends State<TelaListaPokemon> {
     );
   }
 
+//barra de pesquisa para filtrar os pokemons
   Widget _barraPesquisa() {
     return Padding(
       padding: const EdgeInsets.only(left: 35, right: 35, bottom: 20, top: 20),
@@ -93,6 +95,7 @@ class TelaListaPokemonState extends State<TelaListaPokemon> {
     );
   }
 
+//lista dos cards
   Widget _listaCardPokemon() {
     return Center(
       child: Wrap(
@@ -105,6 +108,7 @@ class TelaListaPokemonState extends State<TelaListaPokemon> {
     );
   }
 
+//cards de pokemon com nome, foto e redirecionamento à tela de detalhes
   Widget _cardPokemon(PokemonDetalhes pokemonDetalhes, BuildContext context) {
     int index = widget.pokemonStore.filtroPokemonLista.indexOf(pokemonDetalhes);
     Color corCard = _agruparPokemons(index);
@@ -146,6 +150,7 @@ class TelaListaPokemonState extends State<TelaListaPokemon> {
     );
   }
 
+//agrupa os pokemons (3) para atribuir uma cor
   Color _agruparPokemons(int index) {
     int pokemonsPorGrupo = 3;
     List<Color> cores = [const Color(0xFFCAE2D5), const Color(0xFFEAD4BC), const Color(0xFF9CCEDD)];

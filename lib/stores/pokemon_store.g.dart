@@ -57,22 +57,6 @@ mixin _$PokemonStore on APokemonStore, Store {
     });
   }
 
-  late final _$mapaDetalhesPokemonAtom =
-      Atom(name: 'APokemonStore.mapaDetalhesPokemon', context: context);
-
-  @override
-  ObservableMap<String, PokemonDetalhes> get mapaDetalhesPokemon {
-    _$mapaDetalhesPokemonAtom.reportRead();
-    return super.mapaDetalhesPokemon;
-  }
-
-  @override
-  set mapaDetalhesPokemon(ObservableMap<String, PokemonDetalhes> value) {
-    _$mapaDetalhesPokemonAtom.reportWrite(value, super.mapaDetalhesPokemon, () {
-      super.mapaDetalhesPokemon = value;
-    });
-  }
-
   late final _$listarPokemonAsyncAction =
       AsyncAction('APokemonStore.listarPokemon', context: context);
 
@@ -100,8 +84,7 @@ mixin _$PokemonStore on APokemonStore, Store {
     return '''
 pokemonLista: ${pokemonLista},
 filtroPokemonLista: ${filtroPokemonLista},
-detalhePokemonLista: ${detalhePokemonLista},
-mapaDetalhesPokemon: ${mapaDetalhesPokemon}
+detalhePokemonLista: ${detalhePokemonLista}
     ''';
   }
 }

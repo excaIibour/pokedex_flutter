@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//tema
 class Tema {
   static ColorScheme cores = const ColorScheme(
     brightness: Brightness.light,
@@ -35,6 +36,7 @@ class Tema {
     scrim: Color(0xFF000000),
   );
 
+//tema padrão
   static ThemeData tema = ThemeData(
     useMaterial3: true,
     colorScheme: cores,

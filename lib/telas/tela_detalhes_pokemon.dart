@@ -14,6 +14,7 @@ class TelaDetalhesPokemonState extends State<TelaDetalhesPokemon> {
   late PageController _secaoController;
   int _secaoAtual = 0;
 
+//inicialização das secoes de detalhes do pokemon selecionado
   @override
   void initState() {
     super.initState();
@@ -30,6 +31,7 @@ class TelaDetalhesPokemonState extends State<TelaDetalhesPokemon> {
   Widget build(BuildContext context) {
     final PokemonDetalhes? pokemonDetalhes = ModalRoute.of(context)!.settings.arguments as PokemonDetalhes?;
 
+//caso os detalhes vierem vazios, aparecerá uma tela de "erro"
     if (pokemonDetalhes == null) {
       return Scaffold(
         appBar: AppBar(
@@ -47,6 +49,7 @@ class TelaDetalhesPokemonState extends State<TelaDetalhesPokemon> {
       );
     }
 
+//widget com os detalhes
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
@@ -102,6 +105,7 @@ class TelaDetalhesPokemonState extends State<TelaDetalhesPokemon> {
     );
   }
 
+//definição das seções (carrossel), exibição dos detalhes
   Widget _secao(PokemonDetalhes pokemonDetalhes) {
     return SizedBox(
       height: 40.0,
@@ -122,6 +126,7 @@ class TelaDetalhesPokemonState extends State<TelaDetalhesPokemon> {
     );
   }
 
+//botões para deixar visivel que é um carrossel
   Widget _secaoBotoes() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -149,6 +154,7 @@ class TelaDetalhesPokemonState extends State<TelaDetalhesPokemon> {
     );
   }
 
+//widget auxiliar para a formatação dos textos das seções
   Widget _secaoTexto(String content) {
     return Center(
       child: Padding(
