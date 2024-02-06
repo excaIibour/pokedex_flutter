@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PokeDex',
+      debugShowCheckedModeBanner: false,
+      title: 'Pokédex',
       theme: Tema.tema,
       initialRoute: '/',
       routes: {
